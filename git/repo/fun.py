@@ -30,7 +30,7 @@ def is_git_dir(d):
 				os.readlink(headref).startswith('refs'))
 	return False
 
-def read_gitfile(f):
+def read_gitfile(f, curpath):
 	""" This is taken from the git setup.c:read_gitfile function.
 	:return gitdir path or None if gitfile is invalid."""
 	
@@ -39,7 +39,7 @@ def read_gitfile(f):
 	line = open(f, 'r').readline().rstrip()
 	if line[0:8] != 'gitdir: ':
 		return None
-	path = os.path.realpath(line[8:])
+        path = os.path.realpath(os.path.join(curpath, line[8:]))
 	return path if is_git_dir(path) else None
 
 def short_to_long(odb, hexsha):
